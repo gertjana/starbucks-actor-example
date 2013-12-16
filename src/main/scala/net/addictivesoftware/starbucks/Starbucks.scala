@@ -8,11 +8,23 @@ import scala.util.Random
 object Starbucks extends App {
   def waitSomeTime = Thread.sleep((Random.nextFloat*1000).toInt)
 
-  implicit val system = ActorSystem.create("StarBucks")
 
   if (args.size > 0 && (args(0) equals "remote"))  {
     println("only starting remote system")
+
+    //overrides config to set host and port for Openshift
+    Option(System.getenv("OPENSHIFT_DIY_IP")) match {
+      case Some(ip) => {
+        System.setProperty("akka.remote.netty.tcp.host", ip)
+        System.setProperty("akka.remote.netty.tcp.port", "8080")
+      }
+    }
+
+    implicit val system = ActorSystem.create("StarBucks")
+
   } else {
+
+    implicit val system = ActorSystem.create("StarBucks")
 
     val customers = List(
       ("Penny", "Tall Latte Machiato"),
