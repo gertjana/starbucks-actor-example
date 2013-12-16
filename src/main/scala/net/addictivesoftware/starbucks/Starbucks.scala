@@ -14,7 +14,7 @@ object Starbucks extends App {
     ("Penny", "Tall Latte Machiato"),
     ("Leonard", "Double Tall Cappuccino"),
     ("Bernadette", "Grande Spicy Pumpkin Latte"),
-    ("Sheldon", "Dopio Espresso")
+    ("Sheldon", "Double Espresso")
   )
 
   val employees = List(
