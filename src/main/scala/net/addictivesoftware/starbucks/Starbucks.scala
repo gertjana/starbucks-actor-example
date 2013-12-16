@@ -11,10 +11,11 @@ object Starbucks extends App {
   implicit val system = ActorSystem.create("StarBucks")
 
   val customers = List(
+    //("Leslie", "Soy Caramel Frappochino")
     ("Penny", "Tall Latte Machiato"),
     ("Leonard", "Double Tall Cappuccino"),
     ("Bernadette", "Grande Spicy Pumpkin Latte"),
-    ("Sheldon", "Dopio Espresso")
+    ("Sheldon", "Double Espresso")
   )
 
   val employees = List(
@@ -23,19 +24,26 @@ object Starbucks extends App {
     system.actorOf(Props[Employee], "Amy")
   )
 
-  println("Opening Starbucks")
-  val starBucks = system.actorOf(Props[Employee]
-         .withRouter(SmallestMailboxRouter(routees=employees)),"StarBucks")
 
-  customers foreach { request =>
-    println(s"Customer ${request._1} orders a ${request._2}")
-    starBucks ! Order(request._2, request._1)
-    waitSomeTime
+
+  if (args(0) equals "remote")  {
+    println("starting remote system")
+  } else {
+    println("Opening Starbucks")
+    val starBucks = system.actorOf(Props[Employee]
+      .withRouter(SmallestMailboxRouter(routees=employees)),"StarBucks")
+
+    customers foreach { request =>
+      println(s"Customer ${request._1} orders a ${request._2}")
+      starBucks ! Order(request._2, request._1)
+      waitSomeTime
+    }
+
+    Thread.sleep(8000)
+    println("Closing up shop")
+    system.shutdown
   }
 
-  Thread.sleep(8000)
-  println("Closing up shop")
-  system.shutdown
 }
 
 
