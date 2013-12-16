@@ -17,6 +17,10 @@ object Starbucks extends App {
       case Some(ip) => {
         System.setProperty("akka.remote.netty.tcp.host", ip)
         System.setProperty("akka.remote.netty.tcp.port", "8080")
+        println(s"Setting host and port to ${ip}:8080")
+      }
+      case None => {
+        println("no openshift environment found, using configured host/port for remoting")
       }
     }
 
