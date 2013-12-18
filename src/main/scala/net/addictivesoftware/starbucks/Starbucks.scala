@@ -9,7 +9,13 @@ object Starbucks {
 
   def main(args:Array[String]):Unit = {
 
-    implicit val system = ActorSystem.create("StarBucks")
+    println("Starting Actor system StarBucks only")
+
+    val system = ActorSystem.create("StarBucks")
+
+    io.Source.stdin.getLines().toStream  //block until return key is pressed
+
+    system.shutdown
 
   }
 }
