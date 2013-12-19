@@ -30,11 +30,12 @@ object Starbucks {
     val starBucks = system.actorOf(Props[Employee]
       .withRouter(RoundRobinRouter(routees=employees)),"StarBucks")
 
-    customers foreach { request =>
-      println(s"Customer ${request._1} orders a ${request._2}")
-      starBucks ! Order(request._2, request._1)
+    for ((name, coffee) <- customers) {
+      println(s"Customer ${name} orders a ${coffee}")
+      starBucks ! Order(coffee, name)
       waitSomeTime
     }
+
 
     Thread.sleep(8000)
     println("Closing up shop")
