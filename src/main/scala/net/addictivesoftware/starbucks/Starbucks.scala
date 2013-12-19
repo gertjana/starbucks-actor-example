@@ -30,9 +30,9 @@ object Starbucks {
     val starBucks = system.actorOf(Props[Employee]
            .withRouter(SmallestMailboxRouter(routees=employees)), "StarBucks")
 
-    customers foreach { order =>
-      println(s"Customer ${order._1} orders a ${order._2}")
-      starBucks ! Order(order._2, order._1)
+    for ((name, coffee) <- customers) {
+      println(s"Customer ${name} orders a ${coffee}")
+      starBucks ! Order(coffee, name)
       waitSomeTime
     }
 
